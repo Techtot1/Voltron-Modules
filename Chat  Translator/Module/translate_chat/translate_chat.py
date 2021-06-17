@@ -58,10 +58,10 @@ class  ChatTranslateModule(ModuleBase):
     
     def chat_message(self, event):
         self._module_data =  self.get_module_data()
-        self.print(self._module_data)
+        #self.print(self._module_data)
         
         curlang = langid.classify(event.message)
-        self.print(curlang)
+       # self.print(curlang)
         curlang  =  curlang[0]
         if not curlang in self._module_data["outlangs"]:
             response_twitch_id  =  self._module_data["account"]
@@ -69,8 +69,11 @@ class  ChatTranslateModule(ModuleBase):
             for i in self._module_data["outlangs"]:
                 translator  =  Translator()
                 message = translator.translate(text=event.message,dest=i,src=curlang).text
-                self.send_chat_message(message,event=event,twitch_id=response_twitch_id)
-            
+                if not message in event.message: 
+                    self.send_chat_message(message,event=event,twitch_id=response_twitch_id)
+                else:
+                    return
+                
             
 
     def  _list_langs(self, input, command):

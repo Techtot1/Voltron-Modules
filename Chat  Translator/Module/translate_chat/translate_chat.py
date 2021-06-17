@@ -1,13 +1,14 @@
+from typing import Text
 from base import module
 from base.module import ModuleBase, ModuleAdminCommand
 from base.events import EVT_CHATMESSAGE
-from  langdetect import detect, DetectorFactory
 from  googletrans import Translator
 import re
+import langid
 class  ChatTranslateModule(ModuleBase):
     module_name  = "Chat_Translate"
     def setup(self):
-        DetectorFactory.seed  =  0
+        #DetectorFactory.seed  =  0
         self._module_data  = self.get_module_data()
         self.langs  =  ("af", "ar", "bg", "bn", "ca", "cs", "cy", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he",
                         "hi", "hr", "hu", "id", "it", "ja", "kn", "ko", "lt", "lv", "mk", "ml", "mr", "ne", "nl", "no", "pa", "pl",
@@ -58,7 +59,10 @@ class  ChatTranslateModule(ModuleBase):
     def chat_message(self, event):
         self._module_data =  self.get_module_data()
         self.print(self._module_data)
-        curlang = detect(event.message)
+        
+        curlang = langid.classify(event.message)
+        self.print(curlang)
+        curlang  =  curlang[0]
         if not curlang in self._module_data["outlangs"]:
             response_twitch_id  =  self._module_data["account"]
             

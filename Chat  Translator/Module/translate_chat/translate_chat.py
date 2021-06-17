@@ -3,7 +3,7 @@ from base import module
 from base.module import ModuleBase, ModuleAdminCommand
 from base.events import EVT_CHATMESSAGE
 from  googletrans import Translator
-import re
+#import re
 import langid
 class  ChatTranslateModule(ModuleBase):
     module_name  = "Chat_Translate"
@@ -87,6 +87,7 @@ class  ChatTranslateModule(ModuleBase):
         if  input in self.langs:
             if not input in self._module_data["outlangs"]:
                 self._module_data["outlangs"].append(input)
+                self.save_module_data(self._module_data)
                 self.print(f"{input} added to outlangs")
             else:
                 self.print(f"{input} already in output languages.")
@@ -100,6 +101,7 @@ class  ChatTranslateModule(ModuleBase):
         if input in self.langs:
             if input in self._module_data["outlangs"]:
                 self._module_data["outlangs"].remove(input)
+                self.save_module_data(self._module_data)
                 self.print(f"{input} removed successfully.")
             else:
                 self.print(f"{input} not in outlangs.")

@@ -45,14 +45,24 @@ class  ChatTranslateModule(ModuleBase):
         self.register_admin_command(ModuleAdminCommand(
             "removeoutlang",
             self._remove_out_lang,
-            usage = f"{self.module_name} remove outlang fr",
+            usage = f"{self.module_name} removeoutlang fr",
             description =  "Remove a output language"
+        ))
+        
+        self.register_admin_command(ModuleAdminCommand(
+            "setprefix",
+            self._set_prefix,
+            usage = f"{self.module_name} setprefix ^ in [lang]: ",
+            description = "set the response prefix"
         ))
         
         if  not 'outlangs' in self._module_data:
             self._module_data["outlangs"] = []
             self._module_data["outlangs"].append("en") 
-            
+        if not 'prefix' in self._module_data:
+            self._module_data["prefix"] =""
+                
+        
         self.event_listen(EVT_CHATMESSAGE, self.chat_message)
         self.save_module_data(self._module_data)
     
@@ -107,7 +117,16 @@ class  ChatTranslateModule(ModuleBase):
                 self.print(f"{input} not in outlangs.")
         else:
             self.print(f"{input} not a valid language")
+     
+    def _set_prefix(self,input,command):
         
+        if not input == self._module_data["prefix"]:
+            self._module_data["prefix"] = input
+            self.save_module_data(self._module_data)
+            self.print(f'"{input}" set as response prefix.')
+        else:
+            self.print(f'"{input}" already the set response prefix.')
+             
         
     def _set_translate_account(self,input,command):
 

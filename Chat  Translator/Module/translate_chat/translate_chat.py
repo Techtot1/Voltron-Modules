@@ -119,8 +119,7 @@ class  ChatTranslateModule(ModuleBase):
 
         self.select_account(account_selected)
         
-    def save_module_data(self, data):
-	    ModuleBase.save_module_data(self, data)
+
 
     def shutdown(self):
         self.save_module_data(self._module_data)
